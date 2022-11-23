@@ -1,0 +1,5 @@
+package mylibrary;
+
+class Magazine {
+	
+}
