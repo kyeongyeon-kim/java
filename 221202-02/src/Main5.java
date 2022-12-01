@@ -1,3 +1,4 @@
+package frame;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +22,10 @@ class OrderPizza extends JFrame implements ActionListener, ItemListener {
 	private JCheckBox chMint;
 	private JLabel result;
 	private Random random = new Random();
+	private JRadioButton pepperroniPizza;
+	private JRadioButton cheesePizza;
+	private JRadioButton bulgogiPizza;
+	private int pizzaPrice;
 
 	public OrderPizza() {
 		JPanel pn1 = new JPanel();
@@ -28,14 +33,17 @@ class OrderPizza extends JFrame implements ActionListener, ItemListener {
 		JPanel pn3 = new JPanel();
 		JPanel pn4 = new JPanel();
 		
-		JRadioButton pepperPizza = new JRadioButton("페퍼로니");
-		JRadioButton cheesePizza = new JRadioButton("치즈");
-		JRadioButton bulgogiPizza = new JRadioButton("불고기");
+		pepperroniPizza = new JRadioButton("페퍼로니");
+		cheesePizza = new JRadioButton("치즈");
+		bulgogiPizza = new JRadioButton("불고기");
 		ButtonGroup group = new ButtonGroup();
-		group.add(pepperPizza);
+		pepperroniPizza.addItemListener(this);
+		cheesePizza.addItemListener(this);
+		bulgogiPizza.addItemListener(this);
+		group.add(pepperroniPizza);
 		group.add(cheesePizza);
 		group.add(bulgogiPizza);
-		pepperPizza.setSelected(true);
+//		pepperroniPizza.setSelected(true);
 		
 		chPineapple = new JCheckBox("파인애플 추가 +2000원");
 		chPineapple.addItemListener(this);
@@ -52,7 +60,7 @@ class OrderPizza extends JFrame implements ActionListener, ItemListener {
 		pn2.add(Box.createGlue());
 		
 		pn4.add(Box.createGlue());
-		pn4.add(pepperPizza);
+		pn4.add(pepperroniPizza);
 		pn4.add(Box.createGlue());
 		pn4.add(cheesePizza);
 		pn4.add(Box.createGlue());
@@ -107,12 +115,28 @@ class OrderPizza extends JFrame implements ActionListener, ItemListener {
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		int price = calculator();
-		result.setText(String.valueOf(price));
+		int topingPrice = calculator();
+		int state = e.getStateChange();
+		if (e.getSource() == pepperroniPizza) {
+			if (state == ItemEvent.SELECTED) {
+				pizzaPrice = 12000;
+			} 
+		} else if (e.getSource() == cheesePizza) {
+			if (state == ItemEvent.SELECTED) {
+				pizzaPrice = 13000;
+			} 
+		} else if (e.getSource() == bulgogiPizza) {
+			if (state == ItemEvent.SELECTED) {
+				pizzaPrice = 15000;
+			} 
+		}
+		
+		int sum = pizzaPrice + topingPrice;
+		result.setText(String.valueOf(sum));
 	}
 	
 	public int calculator() {
-		int price = 10000;
+		int price = 0;
 		price += chPineapple.isSelected() ? 2000 : 0;
 		price += chOlive.isSelected() ? 1000 : 0;
 		price += chMint.isSelected() ? 3000 : 0;
