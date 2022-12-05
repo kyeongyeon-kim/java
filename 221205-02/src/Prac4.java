@@ -1,3 +1,4 @@
+package prac;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,7 +50,7 @@ class Player {
 
 	@Override
 	public String toString() {
-		return "등번호 : " + backNum + " 이름 : " + name + "\n";
+		return "[등번호 : " + backNum + " 이름 : " + name + "]\n";
 	}
 
 	public String getBackNum() {
@@ -70,34 +71,38 @@ class Player {
 	
 }
 
+
 public class Prac4 {
+	static final Player P1 = new Player("1" , "김승규");
+	static final Player P12 = new Player("12" , "송범근");
+	static final Player P21 = new Player("21" , "조현우");
+	static final Player P20 = new Player("20"  ,"권경원");
+	static final Player P15 = new Player("15" , "김문환");
+	static final Player P4 = new Player("4" , "김민재");
+	static final Player P19 = new Player("19" , "김영권");
+	static final Player P3 = new Player("3" , "김진수");
+	static final Player P23 = new Player("13" , "김태환");
+	static final Player P2 = new Player("2" , "윤종규");
+	static final Player P24 = new Player("24" , "조유민");
+	static final Player P14 = new Player("14" , "홍철");
+	static final Player P22 = new Player("22" , "권창훈");
+	static final Player P17 = new Player("17" , "나상호");
+	static final Player P8 = new Player("8" , "백승호");
+	static final Player P13 = new Player("13" , "손준호");
+	static final Player P7 = new Player("7" , "손흥민");
+	static final Player P26 = new Player("26" , "송민규");
+	static final Player P18 = new Player("18" , "이강인");
+	static final Player P10 = new Player("10" , "이재성");
+	static final Player P5 = new Player("5" , "정우영");
+	static final Player P25 = new Player("25" , "정우영");
+	static final Player P6 = new Player("6" , "황인범");
+	static final Player P11 = new Player("11" , "황희찬");
+	static final Player P9 = new Player("9" , "조규성");
+	static final Player P16 = new Player("16" , "황의조");
 	
-	static final Player P1 = new Player("1" ,"김승규");
-	static final Player P12 = new Player("12" ,"송범근");
-	static final Player P21 = new Player("21" ,"조현우");
-	static final Player P20 = new Player("20" ,"권경원");
-	static final Player P15 = new Player("15" ,"김문환");
-	static final Player P4 = new Player("4" ,"김민재");
-	static final Player P19 = new Player("19" ,"김영권");
-	static final Player P3 = new Player("3" ,"김진수");
-	static final Player P23 = new Player("13" ,"김태환");
-	static final Player P2 = new Player("2" ,"윤종규");
-	static final Player P24 = new Player("24" ,"조유민");
-	static final Player P14 = new Player("14" ,"홍철");
-	static final Player P22 = new Player("22" ,"권창훈");
-	static final Player P17 = new Player("17" ,"나상호");
-	static final Player P8 = new Player("8" ,"백승호");
-	static final Player P13 = new Player("13" ,"손준호");
-	static final Player P7 = new Player("7" ,"손흥민");
-	static final Player P26 = new Player("26" ,"송민규");
-	static final Player P18 = new Player("18" ,"이강인");
-	static final Player P10 = new Player("10" ,"이재성");
-	static final Player P5 = new Player("5" ,"정우영");
-	static final Player P25 = new Player("25" ,"정우영");
-	static final Player P6 = new Player("6" ,"황인범");
-	static final Player P11 = new Player("11" ,"황희찬");
-	static final Player P9 = new Player("9" ,"조규성");
-	static final Player P16 = new Player("16" ,"황의조");
+	public static void showPlayer() {
+		System.out.println();
+	}
 	
 
 	public static boolean isNumberChar(char ch) {
@@ -112,16 +117,48 @@ public class Prac4 {
 		}
 		return true;
 	}
-	public static <T> void main(String[] args) {
+	
+	public static Player findByBackNum(List<Player> list, String backNum) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getBackNum().equals(backNum)) {
+				return list.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public static int isNameDuplication(List<Player> list, Player p) {
+		int count = 0;
+		for (int j = 0; j < list.size(); j++) {
+			if (list.get(j).getName().equals(p.getName())) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public static boolean isDuplication(List list, Player p) {
+		for (int j = 1; j < list.size(); j++) {
+			if (list.get(list.size() - 1) == list.get(j - 1)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
+
+	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		
 		List<Player> bestEleven = new ArrayList<>(11);
 		List<Player> entry = new ArrayList<>(Arrays.asList(P1, P12, P21, P20, P15
 															, P4, P19, P3, P23, P2
-															, P2, P24, P14, P22, P17
+															, P24, P14, P22, P17
 															, P8, P13, P7, P26, P18
 															, P10, P5, P25, P6, P11
-															, P11, P9, P16));
+															, P9, P16));
 		Collections.sort(entry, new Comparator<Player>() {
 			@Override
 			public int compare(Player o1, Player o2) {
@@ -131,35 +168,54 @@ public class Prac4 {
 			}
 		});;
 		System.out.println(entry);
-		boolean onOff = true;
 		int count = 0;
+		boolean onOff = true;
 		while (onOff) {
-			System.out.println("==========================");
+			System.out.println("============================");
 			System.out.println("선수의 등번호 혹은 이름을 입력해주세요.");
-			System.out.println("==========================");
+			System.out.println("============================");
 			String input = scan.next();
-			if (isNumberFormat2(input)) {
-				for (int i = 0; i < entry.size(); i++) {
-					if (entry.get(i).getBackNum().equals(input)) {
-						bestEleven.add(entry.get(i));
-					}
-					for (int j = 1; j < bestEleven.size(); j++) {
-						if (bestEleven.get(bestEleven.size() - 1) == bestEleven.get(j - 1)) {
-							bestEleven.remove(bestEleven.size() - 1);
-							System.out.println("중복된 선수를 명단에 넣을 수 없습니다.");
+			boolean strOrInt = false;
+			try {
+				strOrInt = Integer.parseInt(input) > 0 ? true : false;
+			} catch (NumberFormatException e) {
+				
+			}
+			for (int i = 0; i < entry.size(); i++) {
+				if (entry.get(i).getBackNum().equals(input) || entry.get(i).getName().equals(input)) {
+					bestEleven.add(entry.get(i));
+					count++;
+					if (isNameDuplication(entry, entry.get(i)) >= 2 && !strOrInt) {
+						bestEleven.remove(bestEleven.size() - 1);
+						System.out.println("중복된 이름이 있는 선수입니다.\n 등번호를 입력해주세요.");
+						String backNum = scan.next();
+						for (int j = 0; j < entry.size(); j++) {
+							if (entry.get(j).getBackNum().equals(backNum)) {
+								System.out.println("중복이름의 선수 정보 : " + entry.get(j));
+							}
 						}
+						Player p = findByBackNum(entry, backNum);
+						bestEleven.add(p);
+						if (isDuplication(bestEleven, p)) {
+							bestEleven.remove(bestEleven.size() - 1);
+							System.out.println("중복된 선수는 명단에 추가할 수 없습니다.");
+						} else {
+							System.out.print(p + "bestEleven에 추가되었습니다.\n");
+						}
+						break;
 					}
-					System.out.println(entry.get(i) + "\nbestEleven에 추가되었습니다.");
-				}
-			} else if (!isNumberFormat2(input)) {
-				for (int i = 0; i < entry.size(); i++) {
-					if (entry.get(i).getName().equals(input)) {
-						bestEleven.add(entry.get(i));
+					if (isDuplication(bestEleven, entry.get(i))) {
+						bestEleven.remove(bestEleven.size() - 1);
+						System.out.println("중복된 선수는 명단에 추가할 수 없습니다.");
+					} else {
 						System.out.println(entry.get(i) + "\nbestEleven에 추가되었습니다.");
-					}
+						break;
+					} 
 				}
-			} 
-			
+				if ((i == entry.size() - 1) && count == 0) {
+					System.out.println("입력한정보는 없는 정보입니다.");
+				}
+			}
 			onOff = bestEleven.size() != 11 ? true : false;
 			System.out.println(11 - bestEleven.size() + "명 더 선택해주세요.");
 		}
