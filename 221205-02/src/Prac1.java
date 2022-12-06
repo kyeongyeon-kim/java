@@ -30,7 +30,7 @@ public class Prac1 {
 		}
 		System.out.println("합 : " + sum);
 		
-		// 위의 리스트 중 값 12의 있는지?
+		// 위의 리스트 중 값 12가 있는지?
 		if(listAll.contains(12)) {
 			int index = listAll.indexOf(12);
 			System.out.println("12의 인덱스 : " + index);
