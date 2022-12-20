@@ -11,10 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 class UserInfoIO extends JDialog {
-	private File nameDB;
-	private File phoneDB;
+
 	private JTextField nameBox;
 	private JTextField phoneNumBox;
+	private JLabel lbl;
 
 	public JTextField getNameBox() {
 		return nameBox;
@@ -32,6 +32,21 @@ class UserInfoIO extends JDialog {
 		this.phoneNumBox = phoneNumBox;
 	}
 
+	private void correctInputAfterClose() {
+//		Integer convertInt1 = Integer.valueOf(nameBox.getText());
+//		Integer convertInt2 = Integer.valueOf(phoneNumBox.getText());
+//		if (nameBox.getText().contains(" ") || phoneNumBox.getText().contains(" ")) {
+//			lbl.setText("공백을 넣을 수 없습니다.");
+//		} else if (convertInt1 instanceof Integer) {
+//			lbl.setText("이름란에 숫자를 넣을 수 없습니다.");
+//		} else if (!(convertInt2 instanceof Integer)) {
+//			lbl.setText("전화번호란에 문자를 넣을 수 없습니다.");
+//		} else {
+//			dispose();
+//		}
+		dispose();
+	}
+
 	public UserInfoIO() {
 		setLayout(null);
 		JLabel nameLabel = new JLabel("이름");
@@ -41,6 +56,10 @@ class UserInfoIO extends JDialog {
 		phoneLabel.setBounds(9, 71, 57, 15);
 		add(phoneLabel);
 		setModal(true);
+
+		lbl = new JLabel("");
+		lbl.setBounds(76, 38, 100, 21);
+		add(lbl);
 
 		nameBox = new JTextField();
 		nameBox.setBounds(76, 18, 96, 21);
@@ -52,9 +71,6 @@ class UserInfoIO extends JDialog {
 		add(phoneNumBox);
 		phoneNumBox.setColumns(10);
 
-		nameDB = new File("D:\\myfolder\\userName.txt");
-		phoneDB = new File("D:\\myfolder\\userPhoneNum.txt");
-
 		JButton inputBtn = new JButton("확인");
 		inputBtn.setBounds(40, 116, 97, 23);
 		add(inputBtn);
@@ -62,9 +78,7 @@ class UserInfoIO extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				UserDB.NAME.add(nameBox.getText());
-				UserDB.PHONE.add(phoneNumBox.getText());
-				dispose();
+				correctInputAfterClose();
 			}
 		});
 		setLocationRelativeTo(null);
@@ -73,33 +87,4 @@ class UserInfoIO extends JDialog {
 
 	}
 
-	public void writeFile() {
-		BufferedWriter bw1 = null;
-		BufferedWriter bw2 = null;
-
-		try {
-			bw1 = new BufferedWriter(new FileWriter(nameDB));
-			bw2 = new BufferedWriter(new FileWriter(phoneDB));
-			bw1.write(nameBox.getText());
-			bw2.write(phoneNumBox.getText());
-
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} finally {
-			if (bw1 != null) {
-				try {
-					bw1.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-			if (bw2 != null) {
-				try {
-					bw2.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-	}
 }
