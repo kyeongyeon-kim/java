@@ -78,7 +78,12 @@ class UserInfoIO extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				correctInputAfterClose();
+				String message = correctInputAfterClose(nameBox.getText(), phoneNumBox.getText());
+				if (message != null) {
+					lbl.setText(message);
+				} else {
+					dispose();
+				}
 			}
 		});
 		setLocationRelativeTo(null);
@@ -86,25 +91,41 @@ class UserInfoIO extends JDialog {
 		setVisible(true);
 
 	}
-	private void correctInputAfterClose() {
-//		Integer convertInt1 = null;
-//		Integer convertInt2 = null;
-//		if (!(nameBox.getText().contains(" ") || phoneNumBox.getText().contains(" "))) {
-//			convertInt1 = Integer.valueOf(nameBox.getText());
-//			convertInt2 = Integer.valueOf(phoneNumBox.getText());
-//		}
-//		if (nameBox.getText().contains(" ") || phoneNumBox.getText().contains(" ")) {
-//			lbl.setText("공백을 넣을 수 없습니다.");
-//		} else if (convertInt1 instanceof Integer) {
-//			lbl.setText("이름란에 숫자를 넣을 수 없습니다.");
-//		}/* else if (!(convertInt2 instanceof Integer)) {
-//			lbl.setText("전화번호란에 문자를 넣을 수 없습니다.");
-//		}*/ else {
-//			dispose();
-//		}
-		dispose();
-	}
+	
 }
+public String correctInputAfterClose(String name, String phoneNum) {
+	
+	if (name.contains(" ") || phoneNum.contains(" ")) {
+		return "공백을 넣을 수 없습니다.";
+	} else if (!isString(name)) {
+		return "이름란에 숫자를 넣을 수 없습니다.";
+	} else if (!isInteger(phoneNum)) {
+		return "전화번호란에 문자를 넣을 수 없습니다.";
+	} 
+	return null;
+}
+
+
+public boolean isString(String str) {
+	for (int i = 0; i < str.length(); i++) {
+		char c = str.charAt(i);
+		if(Integer.valueOf(c) instanceof Integer) {
+			return false;
+		}
+	}
+	return true;
+}
+
+public boolean isInteger(String str) {
+	for (int i = 0; i < str.length(); i++) {
+		char c = str.charAt(i);
+		if(!(Integer.valueOf(c) instanceof Integer)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 
 public class FirstFrame extends JFrame implements ActionListener {
 	private File name = new File("D:\\myfolder\\userName.txt");
@@ -190,7 +211,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 			searchInfo();
 		}
 	}
-
+	
 	public void searchInfo() {
 		TableModel tm = table.getModel();
 		if (str.equals("ALL")) {
