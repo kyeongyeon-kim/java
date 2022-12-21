@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -15,8 +17,9 @@ import java.util.StringTokenizer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -25,116 +28,151 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+
+class UserInfoIO extends JDialog {
+
+	private JTextField nameBox;
+	private JTextField phoneNumBox;
+	private JLabel lbl;
+
+	public JTextField getNameBox() {
+		return nameBox;
+	}
+
+	public JTextField getPhoneNumBox() {
+		return phoneNumBox;
+	}
+
+	public UserInfoIO() {
+		getContentPane().setLayout(null);
+		JLabel nameLabel = new JLabel("이름");
+		nameLabel.setBounds(9, 42, 57, 15);
+		getContentPane().add(nameLabel);
+		JLabel phoneLabel = new JLabel("전화번호");
+		phoneLabel.setBounds(9, 71, 57, 15);
+		getContentPane().add(phoneLabel);
+		setModal(true);
+
+		lbl = new JLabel("");
+		lbl.setBounds(9, 96, 163, 21);
+		lbl.setForeground(Color.RED);
+		lbl.setFont(new Font(null, Font.PLAIN, 10));
+		getContentPane().add(lbl);
+
+		nameBox = new JTextField();
+		nameBox.setBounds(76, 39, 96, 21);
+		getContentPane().add(nameBox);
+		nameBox.setColumns(10);
+
+		phoneNumBox = new JTextField();
+		phoneNumBox.setBounds(76, 68, 96, 21);
+		getContentPane().add(phoneNumBox);
+		phoneNumBox.setColumns(10);
+
+		JButton inputBtn = new JButton("확인");
+		inputBtn.setBounds(40, 127, 97, 23);
+		getContentPane().add(inputBtn);
+		inputBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				correctInputAfterClose();
+			}
+		});
+		setLocationRelativeTo(null);
+		setSize(200, 200);
+		setVisible(true);
+
+	}
+	private void correctInputAfterClose() {
+//		Integer convertInt1 = null;
+//		Integer convertInt2 = null;
+//		if (!(nameBox.getText().contains(" ") || phoneNumBox.getText().contains(" "))) {
+//			convertInt1 = Integer.valueOf(nameBox.getText());
+//			convertInt2 = Integer.valueOf(phoneNumBox.getText());
+//		}
+//		if (nameBox.getText().contains(" ") || phoneNumBox.getText().contains(" ")) {
+//			lbl.setText("공백을 넣을 수 없습니다.");
+//		} else if (convertInt1 instanceof Integer) {
+//			lbl.setText("이름란에 숫자를 넣을 수 없습니다.");
+//		}/* else if (!(convertInt2 instanceof Integer)) {
+//			lbl.setText("전화번호란에 문자를 넣을 수 없습니다.");
+//		}*/ else {
+//			dispose();
+//		}
+		dispose();
+	}
+}
+
 public class FirstFrame extends JFrame implements ActionListener {
-	private File name = new File("C:\\myfolder\\userName.txt");
-	private File phoneNum = new File("C:\\myfolder\\userPhoneNum.txt");
+	private File name = new File("D:\\myfolder\\userName.txt");
+	private File phoneNum = new File("D:\\myfolder\\userPhoneNum.txt");
 	private JTable table;
 	private DefaultTableModel model;
+	private Object str = "ALL";
+	private JTextField tf;
 
 	public FirstFrame() {
 		JMenu m = new JMenu("관리");
 		JMenuItem insert = new JMenuItem("추가");
 		JMenuItem remove = new JMenuItem("삭제");
+		JMenuItem close = new JMenuItem("종료");
 		JMenuBar mb = new JMenuBar();
 		m.add(insert);
 		m.add(remove);
+		m.add(close);
 		mb.add(m);
 		setJMenuBar(mb);
 		insert.addActionListener(this);
 		remove.addActionListener(this);
+		close.addActionListener(this);
+		tf = new JTextField(20);
 		
-		JButton closeBtn = new JButton("종료");
-		closeBtn.setBounds(150, 150, 60, 40);
-		closeBtn.addActionListener(new ActionListener() {
-			
-			
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				writeFile(name, phoneNum);
-			}
-		});
-		add(closeBtn);
-		
-		JPanel p = new JPanel();
-		JTextField tf = new JTextField(20);
-	    JButton serach = new JButton("검색");
-	    add(p, "South");
-	    String[] comboName = { " ALL", "이름", "전화번호"};
-	 
-	    JComboBox combo = new JComboBox(comboName);
-	    combo.addItemListener(new ItemListener() {
-			
+		JButton serach = new JButton("검색");
+		serach.addActionListener(this);
+		String[] comboName = { " ALL", "이름", "전화번호" };
+
+		JComboBox combo = new JComboBox(comboName);
+		combo.addItemListener(new ItemListener() {
+
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				TableModel tm = table.getModel();
-				Object str = combo.getSelectedItem();
-				int row = 0;
-				int column = 0;
-				Color c = Color.YELLOW;
-				TableCellRenderer render = table.getCellRenderer(row, column);
-				if (str == "ALL") {
-					Loop1 :
-					for (int i = 0; i < tm.getRowCount(); i++) {
-						for (int j = 0; j < tm.getColumnCount(); j++) {
-							Object obj = model.getValueAt(i, j);
-							if (obj.equals(tf.getText())) {
-								((JComponent) render).setBackground(c);
-							}
-						}
-					}
-				} else if (str == "이름") {
-					for (int i = 0; i < tm.getRowCount(); i++) {
-						Object obj = model.getValueAt(i, 0);
-						if (obj.equals(tf.getText())) {
-							((JComponent) render).setBackground(c);
-						}
-					}
-				} else if (str == "전화번호") {
-					for (int i = 0; i < tm.getRowCount(); i++) {
-						Object obj = model.getValueAt(i, 1);
-						if (obj.equals(tf.getText())) {
-							((JComponent) render).setBackground(c);
-						}
-					}
-				}
+				str = combo.getSelectedItem();
 			}
 		});
-	   
-		
+
 		String[] header = { "이름", "전화번호" };
 		model = new DefaultTableModel(header, 0);
 		table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
-		
+
 		getContentPane().add(scrollPane, "Center");
-		
+
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 250, 400, 50);
-		panel.setLayout(null);
 		getContentPane().add(panel, BorderLayout.SOUTH);
-		panel.setBackground(Color.yellow);
-        panel.add(combo);
-        panel.add(tf);
-        panel.add(serach);
-		
-		readFile(name,phoneNum);
+		panel.setBackground(Color.ORANGE);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel.add(combo);
+		panel.add(tf);
+		panel.add(serach);
+
+		readFile(name, phoneNum);
 
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(400, 300);
 		setLocationRelativeTo(null);
 	}
-
+	
 	public static void main(String[] args) {
 		// 전화번호부 프로그램
 		// 사람이름 & 전화번호
 		// 목록 보기
 		// 추가 하기
-		FirstFrame f = new FirstFrame();
+		new FirstFrame();
 	}
 
 	@Override
@@ -144,11 +182,45 @@ public class FirstFrame extends JFrame implements ActionListener {
 			UserInfoIO data = new UserInfoIO();
 			addStringRow(data);
 		} else if (command.equals("삭제")) {
-			clearRow();
+			selectedRemoveRow();
+		} else if (command.equals("종료")) {
+			writeFile(name, phoneNum);
+			dispose();
+		} else if (command.equals("검색")) {
+			searchInfo();
 		}
 	}
 
-	private void addStringRow(UserInfoIO data) {
+	public void searchInfo() {
+		TableModel tm = table.getModel();
+		if (str.equals("ALL")) {
+			for (int i = 0; i < tm.getRowCount(); i++) {
+				for (int j = 0; j < tm.getColumnCount(); j++) {
+					Object obj = model.getValueAt(i, j);
+					if (obj.equals(tf.getText())) {
+						table.changeSelection(i, j, false, false);
+					}
+				}
+			}
+		} else if (str.equals("이름")) {
+			for (int i = 0; i < tm.getRowCount(); i++) {
+				Object obj = model.getValueAt(i, 0);
+				if (obj.equals(tf.getText())) {
+					table.changeSelection(i, 0, false, false);
+				}
+			}
+		} else if (str.equals("전화번호")) {
+			for (int i = 0; i < tm.getRowCount(); i++) {
+				Object obj = model.getValueAt(i, 1);
+				if (obj.equals(tf.getText())) {
+					System.out.println(obj);
+					table.changeSelection(i, 1, false, false);
+				}
+			}
+		}
+	}
+
+	public void addStringRow(UserInfoIO data) {
 		String[] inputStr = new String[2];
 		String inputName = data.getNameBox().getText();
 		String inputPhoneNum = data.getPhoneNumBox().getText();
@@ -157,11 +229,9 @@ public class FirstFrame extends JFrame implements ActionListener {
 		model.addRow(inputStr);
 	}
 
-	private void clearRow() {
+	public void selectedRemoveRow() {
 		int index = table.getSelectedRow();
-		if (index < 0) {
-//	            showMessage("삭제할 행을 선택해 주세요.");
-		} else {
+		if (index >= 0) {
 			model.removeRow(index);
 		}
 	}
