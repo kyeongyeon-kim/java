@@ -30,7 +30,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-
 class UserInfoIO extends JDialog {
 
 	private JTextField nameBox;
@@ -91,41 +90,28 @@ class UserInfoIO extends JDialog {
 		setVisible(true);
 
 	}
-	
-}
-public String correctInputAfterClose(String name, String phoneNum) {
-	
-	if (name.contains(" ") || phoneNum.contains(" ")) {
-		return "공백을 넣을 수 없습니다.";
-	} else if (!isString(name)) {
-		return "이름란에 숫자를 넣을 수 없습니다.";
-	} else if (!isInteger(phoneNum)) {
-		return "전화번호란에 문자를 넣을 수 없습니다.";
-	} 
-	return null;
-}
 
+	public String correctInputAfterClose(String name, String phoneNum) {
 
-public boolean isString(String str) {
-	for (int i = 0; i < str.length(); i++) {
-		char c = str.charAt(i);
-		if(Integer.valueOf(c) instanceof Integer) {
-			return false;
+		if (name.contains(" ") || phoneNum.contains(" ")) {
+			return "공백을 넣을 수 없습니다.";
+		} else if (isNotString(name)) {
+			return "이름란에 숫자를 넣을 수 없습니다.";
+		} else if (isNotInteger(phoneNum)) {
+			return "전화번호란에 문자를 넣을 수 없습니다.";
+		} else {
+			return null;
 		}
 	}
-	return true;
-}
 
-public boolean isInteger(String str) {
-	for (int i = 0; i < str.length(); i++) {
-		char c = str.charAt(i);
-		if(!(Integer.valueOf(c) instanceof Integer)) {
-			return false;
-		}
+	public boolean isNotString(Object str) {
+		return !(str instanceof String);
 	}
-	return true;
-}
 
+	public boolean isNotInteger(Object str) {
+		return !(str instanceof Integer);
+	}
+}
 
 public class FirstFrame extends JFrame implements ActionListener {
 	private File name = new File("D:\\myfolder\\userName.txt");
@@ -150,7 +136,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 		remove.addActionListener(this);
 		close.addActionListener(this);
 		tf = new JTextField(20);
-		
+
 		JButton serach = new JButton("검색");
 		serach.addActionListener(this);
 		String[] comboName = { " ALL", "이름", "전화번호" };
@@ -187,7 +173,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 		setSize(400, 300);
 		setLocationRelativeTo(null);
 	}
-	
+
 	public static void main(String[] args) {
 		// 전화번호부 프로그램
 		// 사람이름 & 전화번호
@@ -211,7 +197,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 			searchInfo();
 		}
 	}
-	
+
 	public void searchInfo() {
 		TableModel tm = table.getModel();
 		if (str.equals("ALL")) {
