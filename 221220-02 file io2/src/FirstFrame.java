@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -85,6 +87,7 @@ class UserInfoIO extends JDialog {
 				}
 			}
 		});
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setSize(200, 200);
 		setVisible(true);
@@ -92,24 +95,48 @@ class UserInfoIO extends JDialog {
 	}
 
 	public String correctInputAfterClose(String name, String phoneNum) {
-
-		if (name.contains(" ") || phoneNum.contains(" ")) {
+		int hasString = 0;
+		if (isEmpty(name) || isEmpty(phoneNum)) {
+			hasString = 1;
 			return "공백을 넣을 수 없습니다.";
-		} else if (isNotString(name)) {
+		}
+		if (isNotString(name)) {
+			hasString = 1;
 			return "이름란에 숫자를 넣을 수 없습니다.";
-		} else if (isNotInteger(phoneNum)) {
+		}
+		if (isNotInteger(phoneNum)) {
+			hasString = 1;
 			return "전화번호란에 문자를 넣을 수 없습니다.";
-		} else {
+		}
+		if (hasString == 0) {
 			return null;
 		}
+		return null;
 	}
 
-	public boolean isNotString(Object str) {
-		return !(str instanceof String);
+	public boolean isEmpty(String str) {
+		if (str.trim().isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 
-	public boolean isNotInteger(Object str) {
-		return !(str instanceof Integer);
+	public boolean isNotString(String str) {
+		for (char c : str.toCharArray()) {
+			if (Character.isDigit(c)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isNotInteger(String str) {
+		for (char c : str.toCharArray()) {
+			if (!Character.isDigit(c)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 
@@ -120,6 +147,7 @@ public class FirstFrame extends JFrame implements ActionListener {
 	private DefaultTableModel model;
 	private Object str = "ALL";
 	private JTextField tf;
+	private boolean closeByCloseBtn;
 
 	public FirstFrame() {
 		JMenu m = new JMenu("관리");
@@ -186,8 +214,18 @@ public class FirstFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command.equals("추가")) {
+			closeByCloseBtn = true;
 			UserInfoIO data = new UserInfoIO();
-			addStringRow(data);
+			data.addWindowListener(new WindowAdapter() {
+
+				@Override
+				public void windowClosed(WindowEvent e) {
+					closeByCloseBtn = false;
+				}
+			});
+			if (!closeByCloseBtn) {
+				addStringRow(data);
+			}
 		} else if (command.equals("삭제")) {
 			selectedRemoveRow();
 		} else if (command.equals("종료")) {
