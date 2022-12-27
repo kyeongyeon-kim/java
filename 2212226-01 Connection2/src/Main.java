@@ -18,7 +18,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		// 서버의 주소, 계정의 아이디-비밀번호
+		// 서버의 주소, 계정의 아이디-비밀번호 (127.0.01)
 		String url = "jdbc:mysql://localhost:3306";
 		String id = "root";
 		String password = "root";
@@ -30,6 +30,7 @@ public class Main {
 			System.out.println("접속 성공");
 			// 명령을 위한 인터페이스
 			stmt = conn.createStatement();
+			// 객체 생성, 추가, 수정 등등 Update
 			//stmt.executeUpdate("SQL 명령어");
 			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS your_db");
 		} catch (SQLException e) {
