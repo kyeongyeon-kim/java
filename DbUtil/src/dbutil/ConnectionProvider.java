@@ -15,15 +15,11 @@ public class ConnectionProvider {
 			e.printStackTrace();
 		}
 	}
-	
-	public static Connection makeConnection() {
+
+	public static Connection makeConnection() throws SQLException {
 		Connection conn = null;
-		try {
-			// 주소에 데이터베이스 USE 사용가능
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/my_db", "root", "root");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		// 주소에 데이터베이스 USE 사용가능
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/my_db", "root", "root");
 		return conn;
 	}
 
